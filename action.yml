@@ -40,6 +40,6 @@ runs:
         
         for index in ${!REPOS[*]}; do 
           echo "Checking out '${REPOS[$index]}' with branch '${REPOS_BRANCHES[$index]}' in folder '${REPOS_BRANCHES[$index]}'"                        
-          git clone ${{inputs.personal-access-token}}@github.com/${REPOS[$index]}
+          git clone https://${{inputs.personal-access-token}}@github.com/${REPOS[$index]} ./${REPOS_BRANCHES[$index]}
         done
       shell: bash
