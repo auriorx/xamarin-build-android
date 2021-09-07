@@ -52,9 +52,11 @@ runs:
     - name: Get dependencies
       run: nuget restore ${{env.SOLUTION_PATH}}   
       shell: pwsh
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.3
     - name: Build
       run: msbuild ${{inputs.build-path}} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=${{inputs.build-configuration}} 
-      shell: bash
+      shell: pwsh
     - name: Upload .AAB for Android
       uses: actions/upload-artifact@v1
       with:
