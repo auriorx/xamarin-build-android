@@ -58,7 +58,7 @@ runs:
       run: msbuild ${{inputs.build-path}} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=${{inputs.build-configuration}} 
       shell: pwsh
     - name: Check
-      run: description
+      run: dir
       shell: pwsh
     - name: Upload .AAB for Android
       uses: actions/upload-artifact@v1
