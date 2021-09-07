@@ -34,7 +34,7 @@ runs:
       shell: bash
     - name: Checkout other repositories
       run: |
-        IFS='~' read -ra REPOS <<< "${{ inputs.additional-repositories-folders }}"
+        IFS='~' read -ra REPOS <<< "${{ inputs.additional-repositories }}"
         IFS='~' read -ra REPOS_FOLDERS <<< "${{ inputs.additional-repositories-folders }}"
         IFS='~' read -ra REPOS_BRANCHES <<< "${{ inputs.additional-repositories-branches }}"
         
