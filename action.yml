@@ -19,6 +19,9 @@ inputs:
   build-path:
     description: Path to the .csproj file you want to build
     required: true
+  build-project:
+    description: Name of the .csproj file to build (needs .csproj in the name)
+    required: true
   search-values: 
     description: Search values to find and replace with replace-values (~ is the delimiter)
     required: false
@@ -55,7 +58,7 @@ runs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
     - name: Build
-      run: msbuild ${{inputs.build-path}} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=${{inputs.build-configuration}} 
+      run: msbuild ${{inputs.build-path}}${{inputs.build-project}} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=${{inputs.build-configuration}} 
       shell: pwsh
     - name: Check
       run: | 
