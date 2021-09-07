@@ -13,6 +13,12 @@ inputs:
   personal-access-token:
     description: Personal access token to use when 'additional-repositories' are private
     required: false
+  build-configuration:
+    description: The build configuration to use (Debug or Release)
+    required: true
+  build-path:
+    description: Path to the .csproj file you want to build
+    required: true
   search-values: 
     description: Search values to find and replace with replace-values (~ is the delimiter)
     required: false
@@ -43,3 +49,15 @@ runs:
           git clone https://${{inputs.personal-access-token}}@github.com/${REPOS[$index]} ./${REPOS_FOLDERS[$index]}
         done
       shell: bash
+    - name: Get dependencies
+      run: nuget restore ${{env.SOLUTION_PATH}}   
+      shell: pwsh
+    - name: Build
+      run: msbuild ${{inputs.build-path}} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=${{inputs.build-configuration}} 
+      shell: pwsh
+    - name: Upload .AAB for Android
+      uses: actions/upload-artifact@v1
+      with:
+        name: xamarin-build-android
+        path: ./${{inputs.build-path}}/bin/Debug    
+    
