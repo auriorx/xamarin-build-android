@@ -58,7 +58,7 @@ runs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
     - name: Build
-      run: msbuild ${{inputs.build-path}}${{inputs.build-project}} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=${{inputs.build-configuration}} 
+      run: msbuild ./${{inputs.build-path}}${{inputs.build-project}} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=${{inputs.build-configuration}} 
       shell: pwsh
     - name: Check
       run: | 
