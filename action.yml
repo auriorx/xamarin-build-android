@@ -39,7 +39,7 @@ runs:
         IFS='~' read -ra REPOS_BRANCHES <<< "${{ inputs.additional-repositories-branches }}"
         
         for index in ${!REPOS[*]}; do 
-          echo "Checking out '${REPOS[$index]}' with branch '${REPOS_BRANCHES[$index]}' in folder '${REPOS_BRANCHES[$index]}'"                        
-          git clone https://${{inputs.personal-access-token}}@github.com/${REPOS[$index]} ./${REPOS_BRANCHES[$index]}
+          echo "Checking out '${REPOS[$index]}' with branch '${REPOS_BRANCHES[$index]}' in folder '${REPOS_FOLDERS[$index]}'"                        
+          git clone https://github.com/${REPOS[$index]} ./${REPOS_FOLDERS[$index]}
         done
       shell: bash
