@@ -1,1 +1,45 @@
-
+name: 'Build Xamarin Android'
+description: Build a .aab file from a Xamarin solution
+inputs:
+  additional-repositories: 
+    description: Additional required repositories to build the project with (separate with a '~')
+    required: false
+  additional-repositories-folders:
+    description: Specify the name of the folder to checkout the repository (separate with a '~')
+    required: false
+  additional-repositories-branches:
+    description: Specify the branch to use with the repository. Matches 'additional-repositories' (separate with a '~')
+    required: false
+  personal-access-token:
+    description: Personal access token to use when 'additional-repositories' are private
+    required: false
+  search-values: 
+    description: Search values to find and replace with replace-values (~ is the delimiter)
+    required: false
+  replace-values: 
+    description: Replace values to replace the search-values with (~ is the delimiter)
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - name: Replace placeholders in repository
+      run: |
+        IFS='~' read -ra SEARCH <<< "${{ inputs.search-values }}"
+        IFS='~' read -ra REPLACE <<< "${{ inputs.replace-values }}"
+        for index in ${!SEARCH[*]}; do 
+          echo "Replacing ${SEARCH[$index]} with ${REPLACE[$index]}"                        
+          grep -rl ${SEARCH[$index]} ./ | xargs sed -i s~${SEARCH[$index]}~${REPLACE[$index]}~g
+        done
+      shell: bash
+    - name: Checkout other repositories
+      run: |
+        IFS='~' read -ra REPOS <<< "${{ inputs.additional-repositories-folders }}"
+        IFS='~' read -ra REPOS_FOLDERS <<< "${{ inputs.additional-repositories-folders }}"
+        IFS='~' read -ra REPOS_BRANCHES <<< "${{ inputs.additional-repositories-branches }}"
+        
+        for index in ${!REPOS[*]}; do 
+          echo "Checking out '${REPOS[$index]}' with branch '${REPOS_BRANCHES[$index]}' in folder '${REPOS_BRANCHES[$index]}'"                        
+          git clone ${{inputs.personal-access-token}}@github.com/${REPOS[$index]}
+        done
+      shell: bash
